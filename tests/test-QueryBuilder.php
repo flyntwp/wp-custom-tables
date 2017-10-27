@@ -54,12 +54,12 @@ class QueryBuilderTest extends TestCase
 
     public function testNestedWhere()
     {
-      $actual = QueryBuilder::table('foo')->select('bar')->where(function ($query) {
-          $query->where('bar', 'baz')->orWhere('bar', 'bat');
-      })->buildQuery();
-      $expected = 'SELECT `bar` FROM `foo` WHERE (`bar` = \'baz\' OR `bar` = \'bat\')';
+        $actual = QueryBuilder::table('foo')->select('bar')->where(function ($query) {
+            $query->where('bar', 'baz')->orWhere('bar', 'bat');
+        })->buildQuery();
+        $expected = 'SELECT `bar` FROM `foo` WHERE (`bar` = \'baz\' OR `bar` = \'bat\')';
 
-      $this->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSelectStartFromTable()
