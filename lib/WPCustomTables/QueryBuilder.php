@@ -2,11 +2,12 @@
 
 namespace WPCustomTables;
 
+use WPCustomTables\RawExpression;
+
 class QueryBuilder
 {
     protected $from;
     protected $select = [];
-    protected $selectRaw = [];
     protected $where = [];
     protected $order;
     protected $orderBy;
@@ -33,26 +34,12 @@ class QueryBuilder
     public function select(...$columns)
     {
         $this->select = $columns;
-        $this->selectRaw = [];
-        return $this;
-    }
-
-    public function selectRaw(...$columns)
-    {
-        $this->selectRaw = $columns;
-        $this->select = [];
         return $this;
     }
 
     public function addSelect(...$columns)
     {
         $this->select = array_merge($this->select, $columns);
-        return $this;
-    }
-
-    public function addSelectRaw(...$columns)
-    {
-        $this->selectRaw = array_merge($this->selectRaw, $columns);
         return $this;
     }
 
@@ -227,7 +214,7 @@ class QueryBuilder
     public function count($countArgument = '*')
     {
         $countQuery = clone $this;
-        $countQuery->selectRaw("COUNT($countArgument)");
+        $countQuery->select(new RawExpression("COUNT($countArgument)"));
         $query = $countQuery->buildQuery();
         return (int)$countQuery->db->get_var($query);
     }
@@ -266,13 +253,10 @@ class QueryBuilder
     {
         $sql = 'SELECT ';
         $params = [];
-        if (!empty($this->select) || !empty($this->selectRaw)) {
+        if (!empty($this->select)) {
             $placeholders = array_map(function ($select) {
                 return $this->escapeWithAlias($select);
             }, $this->select);
-            $placeholders = array_merge($placeholders, array_map(function ($selectRaw) {
-                return $this->realEscape($selectRaw);
-            }, $this->selectRaw));
             $sql .= implode(', ', $placeholders);
         } else {
             $sql .= '*';
@@ -406,6 +390,9 @@ class QueryBuilder
 
     protected function escapeSqlId($string)
     {
+        if ($string instanceof RawExpression) {
+            return $this->realEscape($string);
+        }
         $strings = explode('.', $string);
         $strings = array_map(function ($string) {
             if ($string === '*') {

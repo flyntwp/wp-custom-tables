@@ -11,10 +11,12 @@ namespace WPCustomTables\Tests;
  * Construction plan test case.
  */
 require_once dirname(__DIR__) . '/lib/WPCustomTables/QueryBuilder.php';
+require_once dirname(__DIR__) . '/lib/WPCustomTables/RawExpression.php';
 
 use Mockery;
 // use Brain\Monkey\Functions;
 use WPCustomTables\QueryBuilder;
+use WPCustomTables\RawExpression;
 
 class QueryBuilderTest extends TestCase
 {
@@ -43,8 +45,11 @@ class QueryBuilderTest extends TestCase
     {
         $actual = QueryBuilder::table('foo')->select('bar')->buildQuery();
         $expected = 'SELECT `bar` FROM `foo`';
+        $actualRaw = QueryBuilder::table('foo')->select(new RawExpression('bar'))->buildQuery();
+        $expectedRaw = 'SELECT bar FROM `foo`';
 
         $this->assertEquals($expected, $actual);
+        $this->assertEquals($expectedRaw, $actualRaw);
     }
 
     public function testNestedWhere()
@@ -55,5 +60,17 @@ class QueryBuilderTest extends TestCase
       $expected = 'SELECT `bar` FROM `foo` WHERE (`bar` = \'baz\' OR `bar` = \'bat\')';
 
       $this->assertEquals($expected, $actual);
+    }
+
+    public function testSelectStartFromTable()
+    {
+        $actualEscaped = QueryBuilder::table('foo')->select('*')->buildQuery();
+        $actualEmpty = QueryBuilder::table('foo')->buildQuery();
+        $actual = QueryBuilder::table('foo')->select(new RawExpression('*'))->buildQuery();
+        $expected = 'SELECT * FROM `foo`';
+
+        $this->assertEquals($expected, $actualEscaped);
+        $this->assertEquals($expected, $actualEmpty);
+        $this->assertEquals($expected, $actual);
     }
 }
