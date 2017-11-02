@@ -10,8 +10,8 @@ namespace WPCustomTables\Tests;
 /**
  * Construction plan test case.
  */
-require_once dirname(__DIR__) . '/lib/WPCustomTables/QueryBuilder.php';
-require_once dirname(__DIR__) . '/lib/WPCustomTables/RawExpression.php';
+require_once dirname(__DIR__) . '/lib/QueryBuilder.php';
+require_once dirname(__DIR__) . '/lib/RawExpression.php';
 
 use Mockery;
 // use Brain\Monkey\Functions;
