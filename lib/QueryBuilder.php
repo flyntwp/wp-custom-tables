@@ -420,7 +420,7 @@ class QueryBuilder
     {
         if (is_string($value)) {
             return '%s';
-        } elseif (is_int($value)) {
+        } elseif (is_int($value) || is_bool($value)) {
             return '%d';
         } elseif (is_float($value)) {
             return '%f';
