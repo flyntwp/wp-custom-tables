@@ -375,7 +375,7 @@ class QueryBuilder
         }
     }
 
-    protected function escapeWithAlias($string)
+    public function escapeWithAlias($string)
     {
         $aliasString = ' as ';
         $aliasStringPosition = stripos($string, $aliasString);
@@ -388,7 +388,7 @@ class QueryBuilder
         }
     }
 
-    protected function escapeSqlId($string)
+    public function escapeSqlId($string)
     {
         if ($string instanceof RawExpression) {
             return $this->realEscape($string);
@@ -416,7 +416,7 @@ class QueryBuilder
         return addslashes($string);
     }
 
-    protected function getDbPlaceholder($value)
+    public function getDbPlaceholder($value)
     {
         if (is_string($value)) {
             return '%s';
