@@ -406,6 +406,9 @@ class QueryBuilder
 
     protected function realEscape($string)
     {
+        if ($string instanceof RawExpression) {
+            return $string;
+        }
         if ($this->db->dbh) {
             if ($this->db->use_mysqli) {
                 return mysqli_real_escape_string($this->db->dbh, $string);
