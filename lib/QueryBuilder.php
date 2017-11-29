@@ -377,6 +377,9 @@ class QueryBuilder
 
     public function escapeWithAlias($string)
     {
+        if ($string instanceof RawExpression) {
+            return $this->realEscape($string);
+        }
         $aliasString = ' as ';
         $aliasStringPosition = stripos($string, $aliasString);
         if ($aliasStringPosition) {
