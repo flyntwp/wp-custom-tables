@@ -199,16 +199,16 @@ class QueryBuilder
         return $this;
     }
 
-    public function get()
+    public function get($buildOnly = false)
     {
         $query = $this->buildQuery();
-        return $this->db->get_results($query);
+        return $buildOnly ? $query : $this->db->get_results($query);
     }
 
-    public function first()
+    public function first($buildOnly = false)
     {
         $query = $this->buildQuery();
-        return $this->db->get_row($query);
+        return $buildOnly ? $query : $this->db->get_row($query);
     }
 
     public function count($countArgument = '*')
@@ -219,10 +219,10 @@ class QueryBuilder
         return (int)$countQuery->db->get_var($query);
     }
 
-    public function update($assignments)
+    public function update($assignments, $buildOnly = false)
     {
         $query = $this->buildUpdateQuery($assignments);
-        return $this->db->query($query);
+        return $buildOnly ? $query : $this->db->query($query);
     }
 
     public function buildQuery()
