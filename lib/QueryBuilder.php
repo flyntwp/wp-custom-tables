@@ -231,6 +231,7 @@ class QueryBuilder
         $sql[] = $this->buildFrom();
         $sql[] = $this->buildJoin();
         $sql[] = $this->buildWhere();
+        $sql[] = $this->buildGroupBy();
         $sql[] = $this->buildOrderBy();
         $sql[] = $this->buildLimit();
 
@@ -329,6 +330,18 @@ class QueryBuilder
     {
         if (!empty($this->orderBy)) {
             return 'ORDER BY ' . $this->escapeSqlId($this->orderBy) . ' ' . ($this->order === 'desc' ? 'DESC' : 'ASC');
+        }
+    }
+
+    public function buildGroupBy()
+    {
+        if (!empty($this->groupBy)) {
+            if (is_array($this->groupBy)) {
+                $groupBy = implode(', ', array_map([$this, 'escapeSqlId'], $this->groupBy));
+            } else {
+                $groupBy = $this->escapeSqlId($this->groupBy);
+            }
+            return 'GROUP BY ' . $groupBy;
         }
     }
 
