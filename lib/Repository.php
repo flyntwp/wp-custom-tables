@@ -12,6 +12,7 @@ class Repository
     protected $tableName = false;
     protected $unprefixedTableName = false;
     protected $primaryKey = false;
+    protected $global = false;
 
     /**
      * Constructor for the database class to inject the table name
@@ -22,7 +23,13 @@ class Repository
     {
         global $wpdb;
         $this->unprefixedTableName = $this->tableName;
-        $this->tableName = $wpdb->prefix . ($this->tableName);
+        if ($this->global === true) {
+            $prefix = $wpdb->get_blog_prefix(0);
+            $this->tableName = $prefix . ($this->tableName);
+        } else {
+            $prefix = $wpdb->get_blog_prefix(null);
+            $this->tableName = $prefix . ($this->tableName);
+        }
     }
 
     /**
