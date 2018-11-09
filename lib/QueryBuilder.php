@@ -213,10 +213,15 @@ class QueryBuilder
 
     public function count($countArgument = '*')
     {
-        $countQuery = clone $this;
-        $countQuery->select(new RawExpression("COUNT($countArgument)"));
+        $countQuery = $this->countQuery($countArgument);
         $query = $countQuery->buildQuery();
         return (int)$countQuery->db->get_var($query);
+    }
+
+    public function countQuery($countArgument = '*')
+    {
+        $countQuery = clone $this;
+        return $countQuery->select(new RawExpression("COUNT($countArgument)"));
     }
 
     public function update($assignments, $buildOnly = false)
