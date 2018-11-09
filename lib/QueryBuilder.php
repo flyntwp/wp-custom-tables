@@ -211,12 +211,16 @@ class QueryBuilder
         return $buildOnly ? $query : $this->db->get_row($query);
     }
 
-    public function count($countArgument = '*')
+    public function count($countArgument = '*', $runQuery = true)
     {
         $countQuery = clone $this;
         $countQuery->select(new RawExpression("COUNT($countArgument)"));
-        $query = $countQuery->buildQuery();
-        return (int)$countQuery->db->get_var($query);
+        if ($runQuery) {
+            $query = $countQuery->buildQuery();
+            return (int)$countQuery->db->get_var($query);
+        } else {
+            return $countQuery;
+        }
     }
 
     public function update($assignments, $buildOnly = false)
