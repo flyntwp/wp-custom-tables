@@ -48,7 +48,7 @@ class Repository
             return false;
         }
 
-        $wpdb->insert($this->tableName, $data);
+        $wpdb->insert($this->tableName, $data, $format);
 
         return $wpdb->insert_id;
     }
