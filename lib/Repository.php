@@ -36,10 +36,11 @@ class Repository
      * Insert data into the current data
      *
      * @param  array  $data - Data to enter into the database table
+     * @param array|string $format - Optional formatting for passed data.
      *
      * @return InsertQuery Object
      */
-    public function insert(array $data)
+    public function insert(array $data, $format = null)
     {
         global $wpdb;
 
@@ -129,10 +130,11 @@ class Repository
      *
      * @param  array  $data           - Array of data to be updated
      * @param  array  $conditionValue - Key value pair for the where clause of the query
+     * @param array|string $format - Optional formatting for passed data.
      *
      * @return Updated object
      */
-    public function update(array $data, array $conditionValue)
+    public function update(array $data, array $conditionValue, $format = null)
     {
         global $wpdb;
 
@@ -140,7 +142,7 @@ class Repository
             return false;
         }
 
-        $updated = $wpdb->update($this->tableName, $data, $conditionValue);
+        $updated = $wpdb->update($this->tableName, $data, $conditionValue, $format);
 
         return $updated;
     }
